@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Darshan Hotel POS - Dashboard</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Dynamic Sidebar injected here by shared.js -->
+    <div id="sidebar-container"></div>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <section id="screen-dashboard" class="app-screen">
+        <div class="screen-header no-print">
+          <div class="header-titles">
+            <h2>Active Tables</h2>
+            <p>Manage dining tables and real-time orders</p>
+          </div>
+          <button id="btn-add-table" class="btn btn-primary">
+            <i class="fa-solid fa-plus"></i> Add New Table
+          </button>
+        </div>
+
+        <!-- Dashboard Grid of Active Tables -->
+        <div class="tables-grid" id="tables-container">
+          <div class="loading-spinner">
+            <i class="fa-solid fa-spinner fa-spin"></i> Loading tables...
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal: Add New Table Modal -->
+  <div id="modal-add-table" class="modal-backdrop hidden no-print">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Add New Table</h3>
+        <button class="modal-close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="form-add-table">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="new-table-name">Table Name / Customer Name</label>
+            <input type="text" id="new-table-name" placeholder="e.g. Table 5, Family 1, Rahul" required autocomplete="off">
+            <small class="form-help">Enter a custom identifier for the client card</small>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary modal-close-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary">Create Table</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Shared and Dashboard Scripts -->
+  <script src="js/shared.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

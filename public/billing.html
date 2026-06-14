@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Darshan Hotel POS - Billing</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- html2pdf.js for PDF downloads -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Dynamic Sidebar injected here by shared.js -->
+    <div id="sidebar-container"></div>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <section id="screen-billing" class="app-screen">
+        <div class="billing-header no-print">
+          <button id="btn-billing-back" class="btn btn-secondary">
+            <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+          </button>
+          <div class="billing-table-title">
+            <h2 id="billing-current-table-name">Loading...</h2>
+            <span class="badge badge-active">Active billing</span>
+          </div>
+          <div></div>
+        </div>
+
+        <div class="billing-layout">
+          <!-- Left Side: Item Selection -->
+          <div class="billing-left no-print">
+            <div class="category-tabs">
+              <button class="category-tab active" data-category="all">All Items</button>
+              <button class="category-tab" data-category="Thali">Thalis</button>
+              <button class="category-tab" data-category="Extra Items">Extra Items</button>
+            </div>
+
+            <!-- Items Lists -->
+            <div class="menu-items-section">
+              <!-- Thali Section -->
+              <div class="menu-category-group" id="group-thali">
+                <h3>Thali Specials</h3>
+                <div class="items-grid" id="thali-items-container">
+                  <!-- Dynamically populated Thalis -->
+                </div>
+              </div>
+
+              <!-- Extra Items Section -->
+              <div class="menu-category-group" id="group-extras">
+                <h3>Extra Items</h3>
+                <div class="items-grid" id="extras-items-container">
+                  <!-- Dynamically populated Extra Items -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Side: Live Bill Section -->
+          <div class="billing-right">
+            <div class="live-bill-card">
+              <div class="receipt-header">
+                <h3>DARSHAN HOTEL</h3>
+                <p class="receipt-sub">Near Highway, Main Chowk</p>
+                <div class="receipt-divider"></div>
+                <div class="receipt-meta">
+                  <div><strong>Table:</strong> <span id="live-receipt-table">Loading...</span></div>
+                  <div><strong>Status:</strong> <span class="text-warning">Unpaid</span></div>
+                </div>
+                <div class="receipt-divider"></div>
+              </div>
+
+              <div class="receipt-body">
+                <div class="receipt-items-headers">
+                  <span>Item</span>
+                  <span class="text-center">Qty</span>
+                  <span class="text-right">Price</span>
+                  <span class="text-right">Total</span>
+                </div>
+                <div class="receipt-items" id="live-receipt-items-container">
+                  <div class="empty-receipt-msg">
+                    <i class="fa-solid fa-basket-shopping"></i>
+                    <p>No items added yet. Click + to add items.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="receipt-footer">
+                <div class="receipt-divider"></div>
+                <div class="receipt-row total-row">
+                  <span>Grand Total:</span>
+                  <span id="live-receipt-grand-total">₹0.00</span>
+                </div>
+                <div class="receipt-divider"></div>
+                
+                <div class="billing-actions no-print">
+                  <button id="btn-generate-bill" class="btn btn-primary btn-block">
+                    <i class="fa-solid fa-file-invoice-dollar"></i> Generate Bill
+                  </button>
+                  <button id="btn-mark-paid" class="btn btn-success btn-block">
+                    <i class="fa-solid fa-circle-check"></i> Mark as Paid
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal: Generate Bill / Receipt Modal -->
+  <div id="modal-generate-bill" class="modal-backdrop hidden">
+    <div class="modal-card receipt-modal-card">
+      <div class="modal-header no-print">
+        <h3>Invoice Receipt</h3>
+        <button class="modal-close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      
+      <!-- Receipt Content (Thermal Receipt Paper Dimension) -->
+      <div class="modal-body receipt-print-wrapper" id="receipt-print-area">
+        <div class="thermal-receipt">
+          <div class="receipt-brand">
+            <h2>DARSHAN HOTEL</h2>
+            <p class="receipt-subtitle">Express Highway Crossroads, Pune</p>
+            <p class="receipt-phone">Phone: +91 98765 43210</p>
+          </div>
+          
+          <div class="receipt-divider-dots"></div>
+          
+          <div class="receipt-meta-grid receipt-invoice-meta">
+            <div><strong>Invoice No:</strong> <span id="receipt-invoice-id">#DH-10023</span></div>
+            <div><strong>Table:</strong> <span id="receipt-table-name">Table 3</span></div>
+            <div><strong>Date:</strong> <span id="receipt-date">14/06/2026</span></div>
+            <div><strong>Time:</strong> <span id="receipt-time">13:45 PM</span></div>
+          </div>
+          
+          <div class="receipt-divider-dots"></div>
+          
+          <table class="receipt-invoice-table">
+            <thead>
+              <tr>
+                <th class="text-left">Item Description</th>
+                <th class="text-center">Qty</th>
+                <th class="text-right">Price</th>
+                <th class="text-right">Amount</th>
+              </tr>
+            </thead>
+            <tbody id="receipt-items-body">
+              <!-- Dynamic Rows -->
+            </tbody>
+          </table>
+          
+          <div class="receipt-divider-dots"></div>
+          
+          <div class="receipt-totals">
+            <div class="totals-row font-bold">
+              <span>Grand Total:</span>
+              <span id="receipt-grand-total">₹0.00</span>
+            </div>
+          </div>
+          
+          <div class="receipt-divider-dots"></div>
+          
+          <div class="receipt-footer-msg">
+            <p><strong>Thank You For Dining With Us!</strong></p>
+            <p>Visit Again soon</p>
+            <small>System Generated Invoice</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer receipt-modal-buttons no-print">
+        <button type="button" class="btn btn-secondary modal-close-btn">Close</button>
+        <button type="button" id="btn-download-pdf" class="btn btn-info">
+          <i class="fa-solid fa-file-pdf"></i> Download PDF
+        </button>
+        <button type="button" id="btn-print-receipt" class="btn btn-success">
+          <i class="fa-solid fa-print"></i> Print Bill
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shared and Billing Scripts -->
+  <script src="js/shared.js"></script>
+  <script src="js/billing.js"></script>
+</body>
+</html>

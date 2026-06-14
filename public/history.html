@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Darshan Hotel POS - Bill History</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- html2pdf.js for PDF downloads -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Dynamic Sidebar injected here by shared.js -->
+    <div id="sidebar-container"></div>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <section id="screen-history" class="app-screen">
+        <div class="screen-header">
+          <div class="header-titles">
+            <h2>Bill History</h2>
+            <p>View, print, and manage all completed sales</p>
+          </div>
+        </div>
+
+        <!-- Filters Bar -->
+        <div class="filters-bar card no-print">
+          <div class="filter-group search-input-group">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="history-search" placeholder="Search by Table Name...">
+          </div>
+          <div class="filter-group">
+            <label for="history-start-date">From:</label>
+            <input type="date" id="history-start-date">
+          </div>
+          <div class="filter-group">
+            <label for="history-end-date">To:</label>
+            <input type="date" id="history-end-date">
+          </div>
+          <button id="btn-clear-filters" class="btn btn-secondary">
+            <i class="fa-solid fa-xmark"></i> Clear
+          </button>
+        </div>
+
+        <!-- Bills Table -->
+        <div class="history-table-container card">
+          <table class="data-table" id="history-table">
+            <thead>
+              <tr>
+                <th>Date & Time</th>
+                <th>Table Name</th>
+                <th>Items Summary</th>
+                <th class="text-right">Total Amount</th>
+                <th class="text-center no-print">Action</th>
+              </tr>
+            </thead>
+            <tbody id="history-table-body">
+              <!-- Dynamic Bill Rows -->
+            </tbody>
+          </table>
+          <div id="history-empty-state" class="empty-state hidden">
+            <i class="fa-solid fa-receipt"></i>
+            <p>No matching bills found.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal: Receipt Details Viewer Modal -->
+  <div id="modal-generate-bill" class="modal-backdrop hidden">
+    <div class="modal-card receipt-modal-card">
+      <div class="modal-header no-print">
+        <h3>Invoice Receipt</h3>
+        <button class="modal-close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      
+      <!-- Receipt Content -->
+      <div class="modal-body receipt-print-wrapper" id="receipt-print-area">
+        <div class="thermal-receipt">
+          <div class="receipt-brand">
+            <h2>DARSHAN HOTEL</h2>
+            <p class="receipt-subtitle">Express Highway Crossroads, Pune</p>
+            <p class="receipt-phone">Phone: +91 98765 43210</p>
+          </div>
+          
+          <div class="receipt-divider-dots"></div>
+          
+          <div class="receipt-invoice-meta">
+            <div><strong>Invoice No:</strong> <span id="receipt-invoice-id">#DH-10023</span></div>
+            <div><strong>Table:</strong> <span id="receipt-table-name">Table 3</span></div>
+            <div><strong>Date:</strong> <span id="receipt-date">14/06/2026</span></div>
+            <div><strong>Time:</strong> <span id="receipt-time">13:45 PM</span></div>
+          </div>
+          
+          <div class="receipt-divider-dots"></div>
+          
+          <table class="receipt-invoice-table">
+            <thead>
+              <tr>
+                <th class="text-left">Item Description</th>
+                <th class="text-center">Qty</th>
+                <th class="text-right">Price</th>
+                <th class="text-right">Amount</th>
+              </tr>
+            </thead>
+            <tbody id="receipt-items-body">
+              <!-- Dynamic Rows -->
+            </tbody>
+          </table>
+          
+          <div class="receipt-divider-dots"></div>
+          
+          <div class="receipt-totals">
+            <div class="totals-row font-bold">
+              <span>Grand Total:</span>
+              <span id="receipt-grand-total">₹0.00</span>
+            </div>
+          </div>
+          
+          <div class="receipt-divider-dots"></div>
+          
+          <div class="receipt-footer-msg">
+            <p><strong>Thank You For Dining With Us!</strong></p>
+            <p>Visit Again soon</p>
+            <small>System Generated Invoice</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer receipt-modal-buttons no-print">
+        <button type="button" class="btn btn-secondary modal-close-btn">Close</button>
+        <button type="button" id="btn-download-pdf" class="btn btn-info">
+          <i class="fa-solid fa-file-pdf"></i> Download PDF
+        </button>
+        <button type="button" id="btn-print-receipt" class="btn btn-success">
+          <i class="fa-solid fa-print"></i> Print Bill
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shared and History Scripts -->
+  <script src="js/shared.js"></script>
+  <script src="js/history.js"></script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Darshan Hotel POS - Admin Panel</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Dynamic Sidebar injected here by shared.js -->
+    <div id="sidebar-container"></div>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <section id="screen-admin" class="app-screen">
+        
+        <!-- ADMIN LOGIN STATE (Not logged in) -->
+        <div id="admin-login-container" class="admin-auth-wrapper">
+          <div class="admin-login-card glass-card">
+            <div class="login-header">
+              <i class="fa-solid fa-lock"></i>
+              <h2>Secure Admin Login</h2>
+              <p>Enter administrative credentials to manage system</p>
+            </div>
+            <form id="form-admin-login" class="login-form">
+              <div class="form-group">
+                <label for="login-username">Username</label>
+                <div class="input-icon-wrapper">
+                  <i class="fa-solid fa-user"></i>
+                  <input type="text" id="login-username" placeholder="Enter username" required autocomplete="username">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="login-password">Password</label>
+                <div class="input-icon-wrapper">
+                  <i class="fa-solid fa-key"></i>
+                  <input type="password" id="login-password" placeholder="Enter password" required autocomplete="current-password">
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary btn-block">
+                <i class="fa-solid fa-right-to-bracket"></i> Login as Admin
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- ADMIN PANEL CONTROL STATE (Logged in) -->
+        <div id="admin-panel-container" class="hidden">
+          <div class="screen-header">
+            <div class="header-titles">
+              <h2>Menu Item Management</h2>
+              <p>Add, edit, or remove menu items and set pricing</p>
+            </div>
+            <button id="btn-admin-add-item" class="btn btn-primary">
+              <i class="fa-solid fa-plus"></i> Add New Item
+            </button>
+          </div>
+
+          <!-- Items management lists -->
+          <div class="admin-categories-layout">
+            <!-- Thali Management -->
+            <div class="admin-category-card card">
+              <div class="card-header-icon border-orange">
+                <i class="fa-solid fa-bowl-food text-orange"></i>
+                <h3>Thali Items</h3>
+              </div>
+              <div class="admin-items-list" id="admin-thali-list">
+                <!-- Dynamic List -->
+              </div>
+            </div>
+
+            <!-- Extra Items Management -->
+            <div class="admin-category-card card">
+              <div class="card-header-icon border-purple">
+                <i class="fa-solid fa-glass-water text-purple"></i>
+                <h3>Extra Items</h3>
+              </div>
+              <div class="admin-items-list" id="admin-extras-list">
+                <!-- Dynamic List -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal: Add/Edit Menu Item Modal -->
+  <div id="modal-menu-item" class="modal-backdrop hidden no-print">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="menu-item-modal-title">Add New Menu Item</h3>
+        <button class="modal-close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="form-menu-item">
+        <input type="hidden" id="menu-item-id">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="menu-item-name">Item Name</label>
+            <input type="text" id="menu-item-name" placeholder="e.g. Special Veg Thali, Buttermilk" required autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label for="menu-item-price">Price (₹)</label>
+            <input type="number" id="menu-item-price" min="0" placeholder="e.g. 150" required>
+          </div>
+          <div class="form-group">
+            <label for="menu-item-category">Category</label>
+            <select id="menu-item-category" required>
+              <option value="Thali">Thali</option>
+              <option value="Extra Items">Extra Items</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary modal-close-btn">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btn-menu-item-save">Save Item</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Shared and Admin Scripts -->
+  <script src="js/shared.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
